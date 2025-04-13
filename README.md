@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI Fitness Trainer
 
 An AI-powered fitness training application that counts exercise repetitions using computer vision.
@@ -42,3 +43,6 @@ python ai-fitness-trainer/src/server.py
 2. Select an exercise (Bicep Curls or Deadlift)
 3. Position yourself in front of the camera
 4. Press 'q' to quit the exercise window
+=======
+# AI-Fitness-Trainer
+>>>>>>> 1c33b7940e5049734b69254fb71a8e4d5339dbd4
