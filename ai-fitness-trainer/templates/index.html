@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Trainer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Fitness Trainer</h1>
+        <div class="exercise-buttons">
+            <a href="{{ url_for('launch_exercise', exercise='curl') }}" class="button">Start Bicep Curl Counter</a>
+            <a href="{{ url_for('launch_exercise', exercise='deadlift') }}" class="button">Start Deadlift Counter</a>
+        </div>
+    </div>
+</body>
+</html>
