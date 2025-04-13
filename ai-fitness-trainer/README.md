@@ -1,67 +1,50 @@
 # AI Fitness Trainer
 
-AI Fitness Trainer is a web application designed to help users track their exercise performance through video analysis. The application utilizes computer vision techniques to count repetitions of specific exercises, such as curls and deadlifts, by analyzing video input.
+AI Fitness Trainer là một ứng dụng sử dụng OpenCV và Mediapipe để theo dõi và đếm số lần thực hiện các bài tập thể dục như bicep curls và deadlifts.
 
-## Project Structure
+## Cách sử dụng
 
-```
-ai-fitness-trainer
-├── src
-│   ├── modules
-│   │   └── PoseModule.py
-│   ├── exercises
-│   │   ├── curl_count.py
-│   │   └── deadlift_count.py
-│   └── server.py
-├── static
-│   └── style.css
-├── templates
-│   └── index.html
-├── assets
-│   └── videos
-│       ├── curls.mp4
-│       └── deadlift.mp4
-├── requirements.txt
+1. **Cài đặt môi trường**:
+   - Cài đặt các thư viện cần thiết:
+     ```bash
+     pip install flask opencv-python mediapipe numpy requests
+     ```
+
+2. **Chạy server**:
+   - Chạy Flask server:
+     ```bash
+     python ai-fitness-trainer/src/server.py
+     ```
+
+3. **Truy cập giao diện**:
+   - Mở trình duyệt và truy cập: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+4. **Bắt đầu bài tập**:
+   - Nhấn nút "Start" để bắt đầu bài tập.
+   - Nhấn nút "Stop" để dừng bài tập và lưu dữ liệu vào database.
+
+## Cấu trúc dự án
+
+GitHub Copilot
+Dưới đây là các bước để lưu lại thay đổi, đẩy lên GitHub và thêm file README.md:
+
+1. Tạo file README.md
+Tạo file README.md trong thư mục gốc của dự án (AI-FITNESS-TRAINER) và thêm nội dung mô tả dự án:
+
+ai-fitness-trainer/ 
+├── assets/ 
+│ └── videos/ 
+│ ├── Curls.mp4 
+│ └── Deadlift.mp4 
+├── src/ 
+│ ├── exercises/ 
+│ │ ├── curl_count.py 
+│ │ ├── deadlift_count.py 
+│ │ └── PoseModule.py 
+│ ├── server.py 
+│ └── templates/ 
+│   └── index.html 
+├── static/ 
+│   └── style.css 
 └── README.md
-```
 
-## Features
-
-- **Pose Detection**: Utilizes OpenCV and MediaPipe to detect human poses in real-time.
-- **Exercise Counting**: Automatically counts repetitions of curls and deadlifts based on arm angles.
-- **Web Interface**: A simple web interface built with Flask to launch exercises and display results.
-
-## Installation
-
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd ai-fitness-trainer
-   ```
-
-2. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-1. Start the Flask server:
-   ```
-   python src/server.py
-   ```
-
-2. Open your web browser and navigate to `http://127.0.0.1:5000`.
-
-3. Use the buttons on the homepage to launch the curl or deadlift counting exercises.
-
-## Requirements
-
-- Python 3.x
-- Flask
-- OpenCV
-- MediaPipe
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.

@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import time
+import requests
+from PoseModule import poseDetector
 import PoseModule as pm
 
 
@@ -12,6 +14,51 @@ count = 0
 count2 = 0
 dir = 0
 dir2 = 0
+
+# Thêm hàm lưu dữ liệu vào database
+def save_to_database(count, count2):
+    try:
+        # Tính số lần thực hiện thực tế (một chu kỳ đầy đủ)
+        left_reps = int(count // 1)  # Làm tròn xuống
+        right_reps = int(count2 // 1)
+
+        data = {
+            'left_count': left_reps,    # Số lần thực hiện tay trái
+            'right_count': right_reps,  # Số lần thực hiện tay phải
+            'total_count': left_reps + right_reps  # Tổng số lần thực hiện
+        }
+        
+        # Gửi dữ liệu qua API POST
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(
+            'http://localhost:5000/save_curl_data', 
+            json=data,
+            headers=headers
+        )
+        
+        # Debug thông tin phản hồi từ server
+        print(f"Request data: {data}")
+        print(f"Response status code: {response.status_code}")
+        print(f"Response content: {response.text}")
+        
+        if response.ok:
+            print(f"✅ Data saved successfully: Left={left_reps}, Right={right_reps}, Total={left_reps + right_reps}")
+        else:
+            print(f"❌ Failed to save data: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"❌ Error saving data: {str(e)}")
+
+# Thêm hàm kiểm tra tín hiệu dừng
+def check_stop_signal():
+    try:
+        response = requests.get('http://localhost:5000/check_exercise_status')
+        if response.ok:
+            data = response.json()
+            return data.get('stop', False)
+    except Exception as e:
+        print(f"❌ Error checking stop signal: {str(e)}")
+    return False
+
 while True:
     success, img = cap.read()
     img = cv2.resize(img, (1280, 720))
@@ -69,9 +116,12 @@ while True:
         # Rep counter
         cv2.putText(img, f'Count: {int(count2)}', (1090, 450), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
 
-    cv2.imshow("Curl Counter", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    # Kiểm tra tín hiệu dừng
+    if check_stop_signal():
+        save_to_database(count, count2)  # Lưu dữ liệu khi dừng
         break
+
+cv2.imshow("Curl Counter", img)
 
 cap.release()
 cv2.destroyAllWindows()

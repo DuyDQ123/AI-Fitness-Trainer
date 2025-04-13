@@ -30,16 +30,32 @@
                     }
                     
                     const exercise = this.getAttribute('data-exercise');
-                    const response = await fetch(`/launch/${exercise}`);
-                    if (response.ok) {
-                        isExerciseRunning = true;
-                        buttons.forEach(btn => {
-                            if (btn !== this) {
-                                btn.style.opacity = '0.5';
-                                btn.style.pointerEvents = 'none';
-                            }
-                        });
-                        stopButton.style.display = 'block';
+                    try {
+                        const response = await fetch(`/launch/${exercise}`);
+                        if (response.ok) {
+                            // Thêm delay để đợi exercise khởi động
+                            setTimeout(async () => {
+                                // Kiểm tra xem exercise có thực sự chạy không
+                                const statusResponse = await fetch('/check_exercise_status');
+                                const statusData = await statusResponse.json();
+                                
+                                if (statusData.isRunning) {
+                                    isExerciseRunning = true;
+                                    buttons.forEach(btn => {
+                                        if (btn !== this) {
+                                            btn.style.opacity = '0.5';
+                                            btn.style.pointerEvents = 'none';
+                                        }
+                                    });
+                                    stopButton.style.display = 'block';
+                                } else {
+                                    alert('Exercise failed to start. Please try again.');
+                                }
+                            }, 1000); // Đợi 1 giây
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Failed to start exercise. Please try again.');
                     }
                 });
             });

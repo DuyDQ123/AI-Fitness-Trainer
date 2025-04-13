@@ -1,4 +1,32 @@
-Flask==2.0.1
-opencv-python==4.5.3.20210927
-mediapipe==0.8.7.1
-numpy==1.21.2
+
+## Yêu cầu hệ thống
+
+- Python 3.8+
+- Flask
+- OpenCV
+- Mediapipe
+- MySQL (phpMyAdmin)
+
+## Cơ sở dữ liệu
+
+Tạo database và bảng trong MySQL:
+
+```sql
+CREATE DATABASE IF NOT EXISTS ai_fitness_tracker;
+USE ai_fitness_tracker;
+
+CREATE TABLE IF NOT EXISTS bicep_curls (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    left_count INT NOT NULL DEFAULT 0,
+    right_count INT NOT NULL DEFAULT 0,
+    total_count INT NOT NULL DEFAULT 0,
+    date_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS deadlifts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    left_count INT NOT NULL DEFAULT 0,
+    right_count INT NOT NULL DEFAULT 0,
+    total_count INT NOT NULL DEFAULT 0,
+    date_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
