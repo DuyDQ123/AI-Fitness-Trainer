@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,9 +10,68 @@
     <div class="container">
         <h1>AI Fitness Trainer</h1>
         <div class="exercise-buttons">
-            <a href="{{ url_for('launch_exercise', exercise='curl') }}" class="button">Start Bicep Curl Counter</a>
-            <a href="{{ url_for('launch_exercise', exercise='deadlift') }}" class="button">Start Deadlift Counter</a>
+            <a href="{{ url_for('launch_exercise', exercise='curl') }}" class="button" data-exercise="curl">Start Bicep Curl Counter</a>
+            <a href="{{ url_for('launch_exercise', exercise='deadlift') }}" class="button" data-exercise="deadlift">Start Deadlift Counter</a>
         </div>
+        <button id="stopButton" class="button stop-button" style="display: none;">Stop Exercise</button>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.button:not(.stop-button)');
+            const stopButton = document.getElementById('stopButton');
+            let isExerciseRunning = false;
+
+            buttons.forEach(button => {
+                button.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    if (isExerciseRunning) {
+                        alert('Please finish the current exercise first!');
+                        return;
+                    }
+                    
+                    const exercise = this.getAttribute('data-exercise');
+                    const response = await fetch(`/launch/${exercise}`);
+                    if (response.ok) {
+                        isExerciseRunning = true;
+                        buttons.forEach(btn => {
+                            if (btn !== this) {
+                                btn.style.opacity = '0.5';
+                                btn.style.pointerEvents = 'none';
+                            }
+                        });
+                        stopButton.style.display = 'block';
+                    }
+                });
+            });
+
+            stopButton.addEventListener('click', async function() {
+                const response = await fetch('/stop_exercise', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    isExerciseRunning = false;
+                    buttons.forEach(btn => {
+                        btn.style.opacity = '1';
+                        btn.style.pointerEvents = 'auto';
+                    });
+                    stopButton.style.display = 'none';
+                }
+            });
+
+            // Kiểm tra trạng thái exercise định kỳ
+            setInterval(async () => {
+                const response = await fetch('/check_exercise_status');
+                const data = await response.json();
+                if (!data.isRunning && isExerciseRunning) {
+                    isExerciseRunning = false;
+                    buttons.forEach(btn => {
+                        btn.style.opacity = '1';
+                        btn.style.pointerEvents = 'auto';
+                    });
+                    stopButton.style.display = 'none';
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
