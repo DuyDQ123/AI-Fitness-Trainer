@@ -5,6 +5,8 @@ import os
 import psutil
 import mysql.connector
 from datetime import datetime
+import time
+import requests
 
 # Đường dẫn đến templates và static
 template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))
@@ -13,6 +15,9 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 # Biến toàn cục để lưu process đang chạy
 current_exercise_process = None
+
+# Thêm biến toàn cục để kiểm soát tín hiệu dừng
+stop_signal = {'stop': False}
 
 # Thông tin cấu hình cơ sở dữ liệu
 db_config = {
@@ -43,12 +48,48 @@ def launch_script(path):
         print(f"❌ Script not found: {path}")
         return False
 
+def check_stop_signal(stop_signal):
+    while not stop_signal.value:
+        if os.path.exists("stop_signal.txt"):
+            print("🛑 Stop signal detected")
+            stop_signal.value = True
+        time.sleep(0.5)  # Kiểm tra tín hiệu dừng mỗi 0.5 giây
+
+def save_to_database(count, count2):
+    try:
+        left_reps = int(count.value)
+        right_reps = int(count2.value)
+        data = {
+            'left_count': left_reps,
+            'right_count': right_reps,
+            'total_count': left_reps + right_reps
+        }
+        print(f"📊 SAVING DATA: {data}")  # Thêm log nổi bật
+        headers = {'Content-Type': 'application/json'}
+        print(f"📡 Sending to: http://localhost:5000/save_curl_data")
+        response = requests.post('http://localhost:5000/save_curl_data', json=data, headers=headers)
+        print(f"📨 Response: {response.status_code} - {response.text}")
+        
+        if response.ok:
+            print(f"✅ DATA SAVED SUCCESSFULLY: {data}")
+        else:
+            print(f"❌ FAILED TO SAVE: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"❌ ERROR SAVING DATA: {str(e)}")
+        import traceback
+        traceback.print_exc()  # In chi tiết lỗi
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/launch/<exercise>')
 def launch_exercise(exercise):
+    # Xóa file stop_signal.txt nếu tồn tại
+    if os.path.exists("stop_signal.txt"):
+        os.remove("stop_signal.txt")
+        print("🗑️ Removed existing stop_signal.txt")
+
     script_map = {
         'curl': 'ai-fitness-trainer/src/exercises/curl_count.py',
         'deadlift': 'ai-fitness-trainer/src/exercises/deadlift_count.py'
@@ -60,27 +101,24 @@ def launch_exercise(exercise):
 
 @app.route('/stop_exercise', methods=['POST'])
 def stop_exercise():
-    global current_exercise_process
-    try:
-        if current_exercise_process:
-            # Gửi tín hiệu dừng đến chương trình
-            current_exercise_process.terminate()
-            current_exercise_process = None
-            print("✅ Exercise stopped successfully")
-            
-            # Lưu dữ liệu vào database (giả sử bạn có API để lưu dữ liệu)
-            # Gửi tín hiệu đến bài tập để lưu dữ liệu
-            return jsonify({'status': 'success', 'message': 'Exercise stopped and data saved!'})
-        else:
-            return jsonify({'status': 'error', 'message': 'No exercise running'}), 400
-    except Exception as e:
-        print(f"❌ Error stopping exercise: {str(e)}")
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+    # Tạo file để báo hiệu dừng
+    with open("stop_signal.txt", "w") as f:
+        f.write("stop")
+    # Đợi lâu hơn để exercise lưu dữ liệu
+    time.sleep(5)  # Tăng từ 2s lên 5s
+    # Sau đó mới terminate process
+    if current_exercise_process:
+        current_exercise_process.terminate()
+        current_exercise_process = None
 
-@app.route('/check_exercise_status', methods=['GET'])
+@app.route('/check_exercise_status')
 def check_exercise_status():
-    # Trả về trạng thái bài tập
-    return jsonify({'stop': False})  # Trả về True nếu cần dừng
+    is_running = current_exercise_process and current_exercise_process.poll() is None
+    # Thêm stop signal vào response
+    return jsonify({
+        'isRunning': is_running,
+        'stop': stop_signal['stop']
+    })
 
 @app.route('/save_curl_data', methods=['POST'])
 def save_curl_data():
@@ -89,7 +127,7 @@ def save_curl_data():
             return jsonify({'error': 'Content-Type must be application/json'}), 415
             
         data = request.get_json()
-        print(f"Received data: {data}")
+        print(f"Received data: {data}")  # Log dữ liệu nhận được
         
         conn = get_db_connection()
         cursor = conn.cursor()
