@@ -1,143 +1,124 @@
-AI Fitness Trainer
-<div align="center"> <img src="https://img.shields.io/badge/Python-3.8+-blue.svg" alt="Python 3.8+"/> <img src="https://img.shields.io/badge/OpenCV-4.5+-green.svg" alt="OpenCV 4.5+"/> <img src="https://img.shields.io/badge/MediaPipe-0.8+-red.svg" alt="MediaPipe 0.8+"/> <img src="https://img.shields.io/badge/Flask-2.0+-orange.svg" alt="Flask 2.0+"/> <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/> </div> <p align="center"> <b>AI Fitness Trainer - Automatically track and analyze your exercises</b> </p>
-📋 Table of Contents
-Introduction
-Features
-Demo
-System Requirements
-Installation
-Usage
-System Architecture
-Technologies Used
-Project Structure
-Contributing
-License
-🎯 Introduction
-AI Fitness Trainer is an intelligent application that uses computer vision and machine learning to track, analyze, and count exercise repetitions. The system detects body postures and movements in real-time, providing feedback on exercise form and keeping track of workout progress. Whether you're doing bicep curls or deadlifts, this application helps ensure proper technique and consistent tracking.
+# AI Fitness Trainer
 
-✨ Features
-Real-time pose detection: Uses MediaPipe to accurately track body movements
-Automatic rep counting: Tracks and counts repetitions for each side (left/right)
-Form analysis: Measures joint angles to ensure correct exercise form
-Visual feedback: Progress bars and statistics displayed directly on video
-Exercise history: View and track your workout progress over time
-Database integration: Automatically saves workout results to a MySQL database
-User-friendly interface: Easy-to-use web interface for controlling exercises
-🎬 Demo
-<img alt="AI Fitness Trainer Demo" src="https://example.com/demo.gif">
-💻 System Requirements
-Operating System: Windows, macOS, or Linux
-Python: 3.8 or higher
-Libraries:
-OpenCV 4.5+
-MediaPipe 0.8+
-Flask 2.0+
-MySQL Connector Python
-NumPy
-Hardware:
-Webcam or camera
-4GB RAM or higher recommended
-Display with resolution of 1280x720 or higher
-Database: MySQL/MariaDB (via XAMPP or standalone)
-🚀 Installation
-1. Clone the repository
-git clone https://github.com/DuyDQ123/AI-Fitness-Trainer.git
-cd AI-Fitness-Trainer
-2. Create and activate a virtual environment (optional but recommended)
-# Windows
-python -m venv venv
-venv\Scripts\activate
+An intelligent fitness training application that uses computer vision to track and count exercise repetitions in real-time. This application helps users monitor their workout progress by automatically counting repetitions for exercises such as bicep curls and deadlifts.
 
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-3. Install required libraries
-pip install -r requirements.txt
-4. Set up the database
-CREATE TABLE bicep_curls (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    left_count INT,
-    right_count INT,
-    total_count INT,
-    date_time DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+## Features
 
-CREATE TABLE deadlifts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    left_count INT,
-    right_count INT,
-    total_count INT,
-    date_time DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-Install and start XAMPP (or any MySQL server)
-Create a new database named ai_fitness_tracker
-Run the following SQL commands to create necessary tables:
-🎮 Usage
-1. Start the server
-python ai-fitness-trainer/src/server.py
-2. Access the web interface
-Open your browser and navigate to:
+- Real-time exercise detection and counting
+- Support for multiple exercises (currently bicep curls and deadlifts)
+- Separate tracking for left and right sides of the body
+- Visual progress bars to monitor form
+- Exercise history dashboard
+- Database storage for tracking progress over time
 
-http://127.0.0.1:5000 if running locally
-Or http://<your-ip-address>:5000 if accessing from another device
-3. Using the application
-Start an exercise: Click on "Start Bicep Curl Counter" or "Start Deadlift Counter"
-Perform the exercise: Position yourself in front of the camera and perform the exercise
-View progress: Watch your real-time progress on the video feed
-Stop the exercise: Click "Stop Exercise" when finished
-View history: Click "View Exercise History" to see your past workouts
-4. Keyboard shortcuts
-Press q to quit the exercise window
-Press ESC to exit the application
-🔄 System Architecture
-The AI Fitness Trainer uses a multi-tier architecture:
+## Technologies Used
 
-Presentation Layer: Web interface built with HTML, CSS, and JavaScript
-Application Layer: Flask server handling requests and business logic
-Computer Vision Layer: OpenCV and MediaPipe for pose detection and analysis
-Data Layer: MySQL database for storing workout data
-The system uses a client-server model where:
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Flask (Python)
+- **Computer Vision**: OpenCV, MediaPipe
+- **Database**: MySQL
+- **Web Server**: Apache (XAMPP)
 
-The Flask server handles HTTP requests and serves the web interface
-Computer vision processing happens in separate Python processes
-Data is exchanged via JSON over HTTP requests
-🛠️ Technologies Used
-Backend: Python, Flask
-Computer Vision: OpenCV, MediaPipe
-Frontend: HTML, CSS, JavaScript
-Database: MySQL/MariaDB
-Process Management: Python subprocess module
-Data Serialization: JSON
-📁 Project Structure
-ai-fitness-trainer/
-├── assets/
-│   └── videos/
-│       ├── Curls.mp4
-│       └── Deadlift.mp4
-├── src/
-│   ├── exercises/
-│   │   ├── curl_count.py         # Bicep curl detection and counting
-│   │   ├── deadlift_count.py     # Deadlift detection and counting
-│   │   └── PoseModule.py         # Pose detection and analysis module
-│   └── server.py                 # Flask server handling API requests
-├── static/
-│   └── style.css                 # CSS styles for the web interface
-├── templates/
-│   └── index.html                # Main web interface template
-├── README.md                     # Project documentation
-├── requirements.txt              # Required Python packages
-└── .gitignore                    # Git ignore file
-👥 Contributing
-Contributions are welcome! Here's how you can contribute:
+## Installation
 
-Fork the repository
-Create your feature branch: git checkout -b feature/amazing-feature
-Commit your changes: git commit -m 'Add some amazing feature'
-Push to the branch: git push origin feature/amazing-feature
-Open a Pull Request
-Please make sure your code follows the existing style and includes appropriate tests.
+### Prerequisites
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Python 3.7 or higher
+- XAMPP (for MySQL database and Apache server)
+- Git
 
-<p align="center"> Developed with ❤️ by <a href="https://github.com/DuyDQ123">DuyDQ123</a> </p>
+### Setup Instructions
+
+1. **Clone the repository**
+   ```
+   git clone https://github.com/DuyDQ123/AI-Fitness-Trainer.git
+   cd AI-Fitness-Trainer
+   ```
+
+2. **Create a virtual environment**
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install required packages**
+   ```
+   pip install flask opencv-python mediapipe numpy mysql-connector-python psutil requests
+   ```
+
+4. **Set up the database**
+   - Start XAMPP and make sure MySQL service is running
+   - Open phpMyAdmin (http://localhost/phpmyadmin)
+   - Create a new database named `ai_fitness_tracker`
+   - Create the following tables:
+
+   ```sql
+   CREATE TABLE bicep_curls (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       left_count INT NOT NULL,
+       right_count INT NOT NULL,
+       total_count INT NOT NULL,
+       date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
+
+   CREATE TABLE deadlifts (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       left_count INT NOT NULL,
+       right_count INT NOT NULL,
+       total_count INT NOT NULL,
+       date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
+   ```
+
+## Usage
+
+1. **Start the Flask server**
+   ```
+   cd ai-fitness-trainer
+   python src/server.py
+   ```
+
+2. **Access the application**
+   Open your web browser and go to `http://localhost:5000`
+
+3. **Select an exercise**
+   Click on either the "Bicep Curl" or "Deadlift" button to start tracking the exercise
+
+4. **Stop the exercise**
+   Click the "Stop Exercise" button when you're finished with your set
+
+5. **View your history**
+   Click on "View History" to see your previous workout statistics
+
+## Project Structure
+
+```
+AI-FITNESS-TRAINER/
+├── .htaccess                    # Apache rewrite rules
+├── ai-fitness-trainer/
+│   ├── assets/
+│   │   └── videos/              # Exercise videos
+│   ├── src/
+│   │   ├── exercises/
+│   │   │   ├── PoseModule.py    # MediaPipe pose detection module
+│   │   │   ├── curl_count.py    # Bicep curl exercise tracker
+│   │   │   └── deadlift_count.py # Deadlift exercise tracker
+│   │   └── server.py            # Flask server
+│   ├── static/
+│   │   └── style.css            # Application styles
+│   └── templates/
+│       └── index.html           # Main application page
+└── README.md                    # This file
+```
+
+## Future Improvements
+
+- Add more exercise types
+- Implement user accounts and authentication
+- Create a mobile app version
+- Add detailed analytics and visualization of progress
+- Implement AI-based form correction suggestions
+
+## License
+
+This project is licensed under the MIT License.
