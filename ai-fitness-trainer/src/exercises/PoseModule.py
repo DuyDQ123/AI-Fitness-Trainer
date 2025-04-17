@@ -11,9 +11,11 @@ class poseDetector():
                  detectionCon=0.5, trackCon=0.5):
 
         self.mode = mode
-        self.model_complexity = model_complexity
+        # Giảm model_complexity xuống 0 để tăng tốc độ nếu cần
+        self.model_complexity = model_complexity  
         self.smooth = smooth
-        self.enable_segmentation = enable_segmentation
+        # Tắt phân đoạn nếu không cần thiết để tăng tốc
+        self.enable_segmentation = False  
         self.smooth_segmentation = smooth_segmentation
         self.detectionCon = detectionCon
         self.trackCon = trackCon
