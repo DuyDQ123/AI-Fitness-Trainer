@@ -104,12 +104,9 @@ def stop_exercise():
     # Tạo file để báo hiệu dừng
     with open("stop_signal.txt", "w") as f:
         f.write("stop")
-    # Đợi lâu hơn để exercise lưu dữ liệu
-    time.sleep(5)  # Tăng từ 2s lên 5s
-    # Sau đó mới terminate process
-    if current_exercise_process:
-        current_exercise_process.terminate()
-        current_exercise_process = None
+    # KHÔNG terminate process ngay, chỉ tạo file và trả về luôn
+    # Để process con tự phát hiện và lưu dữ liệu rồi thoát
+    return jsonify({'status': 'stop signal sent'})
 
 @app.route('/check_exercise_status')
 def check_exercise_status():

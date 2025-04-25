@@ -39,7 +39,16 @@ def process_video(stop_signal, count, count2):
             angle = detector.findAngle(img, 11, 13, 15)   # Tay trái
             per2 = np.interp(angle1, (60, 150), (100, 0))
             per = np.interp(angle, (60, 150), (100, 0))
-
+            if  angle > 170 or  angle1 > 170:
+                cv2.putText(
+                    img,
+                    "Wrong form! Keep your back straight!",
+                    (300, 680),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1.2,
+                    (0, 0, 255),
+                    3
+                )
             if per == 100 and dir == 0:
                 with count.get_lock():
                     count.value += 0.5
