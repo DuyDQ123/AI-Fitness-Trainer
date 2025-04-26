@@ -42,7 +42,7 @@ def process_video(stop_signal, count, count2):
             if  angle > 170 or  angle1 > 170:
                 cv2.putText(
                     img,
-                    "Wrong form! Don't let your arms to straight!",
+                    "Wrong form! Don't let your arms too straight!",
                     (300, 680),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1.2,
