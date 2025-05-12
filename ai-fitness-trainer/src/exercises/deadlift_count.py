@@ -135,8 +135,3 @@ if __name__ == "__main__":
 
     video_process.join()
     stop_signal_process.join()
-
-    # Thêm dòng sau để lưu dữ liệu khi thoát khỏi process
-    # print(f"Left Reps: {count.value}, Right Reps: {count2.value}")
-    # save_to_database(count, count2)
-    # print("✅ Data saved after stop signal")
